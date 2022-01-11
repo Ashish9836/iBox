@@ -15,7 +15,16 @@ const Forgot = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setError("");
+    setErrStyle({ display: "none" });
+let em = email;
+em = em.trim();
+if(!em){
+  setError("email not found");
+  setErrStyle({display:"block"})
+  setEmail("");
+  return;
+}
     try {
       setError("");
       setLoading(true);
@@ -31,11 +40,13 @@ const Forgot = () => {
 
   return (
     <>
-      <div className="flex flex-row flex-wrap justify-center  ">
+      <div className="flex flex-row flex-wrap justify-center">
+
         <form
           onSubmit={(e)=>handleSubmit(e)}
           className="md:basis-1/2 basis-4/5 flex flex-col text-center flex-wrap bg-gray-200 p-2 loginClass"
         >
+              <div style={errStyle} className="text-red-600 text-2xl text-center bg-gray-100">{error}</div>
           <div className="text-5xl m-2 loginClass text-gray-500">Forgot Password</div>
           <div className="flex flex-col flex-wrap loginClass">
             <label className="block m-1 text-2xl text-gray-800 loginClass" for="email">
@@ -47,6 +58,7 @@ const Forgot = () => {
                 type="email"
                 id="email"
                 value={email}
+                required
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={`enter your email address`}
               />

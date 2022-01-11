@@ -12,7 +12,19 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setError("");
+    setErrStyle({ display: "none" });
+    let em = email;
+    em = em.trim();
+    let pss = password;
+    pss = pss.trim();
+    if(!em || !pss){
+      setError("email or password not found");
+      setErrStyle({display:"block"})
+      setEmail("");
+      setPassword("");
+      return;
+    }
     try {
       setError("");
       setLoading(true);
@@ -20,7 +32,7 @@ const Login = () => {
       await login(email, password);
       navigate("/dashboard");
     } catch {
-      setError("Error signing in");
+      setError("email or password is incorrect");
       setErrStyle({ display: "block" });
     }
     setLoading(false);
@@ -29,11 +41,14 @@ const Login = () => {
   return (
     <>
       <div className="flex flex-row flex-wrap justify-center">
+     
         <form
           onSubmit={(e)=>handleSubmit(e)}
           className="md:basis-1/2 basis-4/5 flex flex-col text-center flex-wrap bg-gray-200 p-2 loginClass"
         >
+             <div style={errStyle} className="text-red-600 text-2xl text-center bg-gray-100">{error}</div>
           <div className="text-5xl m-2 loginClass text-gray-700">Login</div>
+          
           <div className="flex flex-col flex-wrap loginClass">
             <label className="block m-1 text-2xl text-gray-800 loginClass" for="email">
              Email
@@ -44,6 +59,7 @@ const Login = () => {
                 type="email"
                 id="email"
                 value ={email}
+                required
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={`enter your email address`}
               />
@@ -59,6 +75,7 @@ const Login = () => {
                 type="password"
                 id="password"
                 value ={password}
+                required
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={`enter your password`}
               />
